@@ -1,6 +1,17 @@
-# CarND-Path-Planning-Project
-Self-Driving Car Engineer Nanodegree Program
-   
+# Path Planning Project
+
+### Reflection
+
+For generating the waypoints I did most of my calculation using Frenet coordinate system. The Frenet coordinate system consists of logitudinal distance (s) and lateral distance (d). This coordinate system was very useful to develop complex logic for lane change etc. 
+
+First I get the previous path points of the car and use the end point to ensure continuity. If there are no points in the previous path then use the current position of the car. Based on this I calculate the points tangent to the car. Next I take three anchor points which are 30m apart in the desired lane. Coordinate tranformation is performed on these points to make the reference angle zero. This makes the further calculations easier.
+
+I use these anchor points and fit a line through them. For this I use a library spline.h. The spline makes sure that the line passes through all the points. It also provides the interpolated values which will be used later. 
+
+The path always consists of 50 points. The remaining points from the previous path are added to the new path and the rest are added using the spline. By using the previous path points we are ensuring continuity. The space between the points is decided based on the desired speed. The corresponding code can be found in main.cpp lines 437-465. Now the next path points are computed based on desired lane and speed.
+
+The logic for lane change and desired speed was kept simple. If there is a car in out lane which is slow then other lanes are checked and if there is no car within 20m in other lane, lane change is performed else our car matched the speed of front car.  
+
 ### Simulator.
 You can download the Term3 Simulator which contains the Path Planning Project from the [releases tab (https://github.com/udacity/self-driving-car-sim/releases).
 
