@@ -243,7 +243,7 @@ int main() {
           	json msgJson;
 
 
-          	// TODO: define a path made up of (x,y) points that the car will visit sequentially every .02 seconds
+          	// define a path made up of (x,y) points that the car will visit sequentially every .02 seconds
 
             int prev_size = previous_path_x.size();
 
@@ -356,12 +356,16 @@ int main() {
             std::vector<double> ptsx;
             std::vector<double> ptsy;
 
+            // reference state
+            // reference the starting point where the car is at or previous path end point
             double ref_x = car_x;
             double ref_y = car_y;
             double ref_yaw = deg2rad(car_yaw);
 
+            // if previous size is almost empty, use the car as starting reference
             if(prev_size < 2) {
 
+              // Use two points that make the path tangent to the car
               double prev_car_x = car_x - cos(car_yaw);
               double prev_car_y = car_y - sin(car_yaw);
 
@@ -372,8 +376,10 @@ int main() {
               ptsy.push_back(car_y);
 
             }
+            // use the previous path's end point as starting reference
             else {
 
+              // Redefine reference state as previous path end point 
               ref_x = previous_path_x[prev_size-1];
               ref_y = previous_path_y[prev_size-1];
 
@@ -381,6 +387,7 @@ int main() {
               double ref_y_prev = previous_path_y[prev_size-2];
               ref_yaw = atan2(ref_y - ref_y_prev, ref_x - ref_x_prev);
 
+              // Use two points that make the path tangent to previous end point 
               ptsx.push_back(ref_x_prev);
               ptsx.push_back(ref_x);
               
